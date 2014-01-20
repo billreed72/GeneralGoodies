@@ -1,10 +1,9 @@
 #!/bin/bash
-tput clear;tput cup 3 15;tput setaf 1;tput setab 7
-echo "Bill's Operations Shell System (BOSS)";tput sgr0
 function mainMenu {
   mainAnswer=""
-  while [ "$mainAnswer" != "x" ]
-  do
+  while [ "$mainAnswer" != "x" ];do
+    tput clear;tput cup 3 15;tput setaf 1;tput setab 7
+    echo "Bill's Operations Shell System (BOSS)";tput sgr0
     tput cup 5 17;tput rev;echo 'Main Menu Heading';tput sgr0
     tput cup 7 17;echo '1. Sub Menu 1'
     tput cup 8 17;echo '2. Sub Menu 2'
@@ -16,14 +15,12 @@ function mainMenu {
       elif [ "$mainAnswer" = "x" ];then break
       fi
     tput sgr0
-  done
-}
+  done }
 function subMenu1 {
-#  tput clear;tput cup 3 15;tput setaf 1;tput setab 7
-#  echo "Bill's Operations Shell System (BOSS)";tput sgr0
   sm1Answer=""
-  while [ "$sm1Answer" != "x" ]
-  do
+  while [ "$sm1Answer" != "x" ];do
+    tput cup 3 15;tput setaf 1;tput setab 7
+    echo "Bill's Operations Shell System (BOSS)";tput sgr0
     tput cup 5 17;tput rev;echo 'Sub Menu 1 Heading';tput sgr0
     tput cup 7 17;echo '1. Who?'
     tput cup 8 17;echo '2. Calendar'
@@ -35,14 +32,12 @@ function subMenu1 {
       elif [ "$sm1Answer" = "x" ]; then mainMenu
       fi
     tput sgr0
-  done
-}
+  done }
 function subMenu2 {
-#  tput clear;tput cup 3 15;tput setaf 1;tput setab 7
-#  echo "Bill's Operations Shell System (BOSS)";tput sgr0
   sm2Answer=""
-  while [ "$sm2Answer" != "x" ]
-  do
+  while [ "$sm2Answer" != "x" ];do
+    tput cup 3 15;tput setaf 1;tput setab 7
+    echo "Bill's Operations Shell System (BOSS)";tput sgr0
     tput cup 5 17;tput rev;echo 'Sub Menu 2 Heading';tput sgr0
     tput cup 7 17;echo '1. SM2 Option A'
     tput cup 8 17;echo '2. SM2 Option B'
@@ -54,6 +49,5 @@ function subMenu2 {
       elif [ "$sm2Answer" = "x" ]; then mainMenu
       fi
     tput sgr0
-  done
-}
+  done }
 mainMenu

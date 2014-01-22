@@ -1,7 +1,19 @@
 #!/bin/bash
 #=================================================================
+# INSTALLATION INSTRUCTIONS
+#=================================================================
+#   PART OF BOSS INSTALL
+#   CREATE SYMLINKS TO REMOTE APPS
+# ln -s /home/billreed/boss/appirio-dev1GAM/gam.py /home/billreed/boss/gam.py
+# ln -s /home/billreed/boss/fringe/fringe-dev.py /home/billreed/boss/fringe-dev.py
+# ln -s /home/billreed/boss/fringe/EdgeOfSanity-Lunatic-privatekey.p12 /home/billreed/boss/EdgeOfSanity-Lunatic-privatekey.p12
+#=================================================================
 # MAIN MENU
 #=================================================================
+## date format ##
+NOW=$(date +"%F")
+NOWT=$(date +"%T")
+
 function mainMenu {
   mainAnswer=""
   while [ "$mainAnswer" != "x" ];do
@@ -54,7 +66,7 @@ function fringeMenu {
     tput cup 7 17;echo '1. List of Drive Files for a user'
     tput cup 8 17;echo '2. Display the calendar'
     tput cup 9 17;echo 'x. Main Menu'
-    tput bold;tput cup 10 17;read -p "Fringe Menu: Enter your choice [1-2 or x]:" fringeAnswer    
+    tput bold;tput cup 10 17;read -p "Fringe Menu: Enter your choice [1-2 or x]:" fringeAnswer
       if [ "$fringeAnswer" = "1" ]; then getDriveFilesWithFringe
       elif [ "$fringeAnswer" = "2" ]; then tput setaf 256; tput cup 20; cal; sleep 1; tput sgr0
       elif [ "$fringeAnswer" = "x" ]; then mainMenu
@@ -87,23 +99,21 @@ function getUserReport {
   tput bold;tput cup 12 17;read -p 'Enter a username or email address:' gAppsUser
   tput sgr0
   tput cup 14 17
-    python /Users/billreed/Desktop/Development/BOSS/appirio-dev1GAM/gam.py \
-    report users \
-    user $gAppsUser > UserReport.csv
-  sleep 3
+    python gam.py report users user $gAppsUser date 2014-01-21 > UserReport-$NOW-$NOWT.csv
+  sleep 1
   tput clear
   }
 #=================================================================
 function getUserReportALL {
-  answer=""
-  while true; do
-    read -p "Do you want to continue (Y/N)?" answer
-    case $answer in
-        [Yy]* ) python /Users/billreed/Desktop/Development/BOSS/appirio-dev1GAM/gam.py report users > AllUsersReport.csv; tput clear; subMenu1;;
-        [Nn]* ) tput setaf 10;echo "You chose wisely. :-) "; sleep 1; tput sgr0; break;;
-        * ) echo "Please answer yes or no!!";;
+  GURAanswer=""
+  while read -p "Do you want to continue (Y/N)?" GURAanswer; do
+    case $GURAanswer in
+      [Yy]* ) python gam.py report users user date 2014-01-21 > AllUsersReport-$NOW-$NOWT.csv; sleep 1; tput clear; break; gamMenu;;
+      [Nn]* ) tput setaf 10;echo "You chose wisely. :-) "; sleep 1; tput sgr0; break; gamMenu;;
+      * ) echo "Please answer yes or no!!";;
     esac
-done }
+  done
+  }
 #=================================================================
 # FRINGE FUNCTIONS
 #=================================================================
@@ -111,18 +121,9 @@ function getDriveFilesWithFringe {
   tput bold;tput cup 12 17;read -p "Enter a user's email address:" gAppsFringeUser
   tput sgr0
   tput cup 14 17
-python /Users/billreed/Desktop/Development/BOSS/fringe/fringe-dev.py \
---api_id="937142619609@developer.gserviceaccount.com" \
---oauth=service-file \
---api_key="/Users/billreed/Desktop/Development/BOSS/fringe/EdgeOfSanity-Lunatic-privatekey.p12" \
---domain=appirio-dev1.com \
---printout=False \
---service=Drive.Files \
---action=list \
---connections=10 \
---prn=$gAppsFringeUser \
---parameters="q='me' in owners;fields=items(title)"
+  python fringe-dev.py --api_id="937142619609@developer.gserviceaccount.com" --oauth=service-file --api_key="EdgeOfSanity-Lunatic-privatekey.p12" --domain=appirio-dev1.com --printout=False --service=Drive.Files --action=list --connections=10 --prn=$gAppsFringeUser --parameters="q='me' in owners;fields=items(title)"
   rm "Drive.Files.appirio-dev1.com"
+  sleep 1
   tput clear
   }
 #=================================================================
